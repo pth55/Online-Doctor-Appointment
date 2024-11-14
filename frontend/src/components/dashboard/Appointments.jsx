@@ -27,7 +27,6 @@ const Modal = ({ appointment, onDelete, onClose }) => {
     );
 };
 
-
 export default function Appointments() {
     const setPatientsList = useSetRecoilState(doctorAtom);
     const [selectedAppointment, setSelectedAppointment] = useState(null);
@@ -90,9 +89,9 @@ export default function Appointments() {
     };
 
     return (
-        <div className="flex flex-col gap-4 p-4">
-            <div className="overflow-x-auto bg-white shadow-md rounded-lg p-4">
-                <h2 className="text-xl font-semibold">Patients List</h2>
+        <div className="flex flex-col gap-4 p-4 bg-pink-50 rounded-3xl">
+            <h2 className="text-4xl font-semibold text-center text-pink-600 mb-6">All Appointments</h2>
+            <div className="overflow-x-auto bg-white shadow-md rounded-3xl p-4 border-2 border-pink-300">
                 <div className="mt-2">
                     <table className="min-w-full bg-white border border-gray-200">
                         <thead>

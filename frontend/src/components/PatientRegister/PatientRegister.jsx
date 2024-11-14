@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const PatientRegister = () => {
+const PatientAppointment = () => {
     const [doctors, setDoctors] = useState([]);
     const [formData, setFormData] = useState({
         firstname: '', 
@@ -15,12 +15,12 @@ const PatientRegister = () => {
     });
 
     const [loading, setLoading] = useState(false);
+    const [errorMessage, setErrorMessage] = useState(''); // Add state for error message
     const navigate = useNavigate();
 
     useEffect(() => {
         const fetchDoctors = async () => {
             try {
-                // api to fetch list of all dcotors
                 const response = await fetch('http://localhost:3043/api/doctorList');
                 const data = await response.json();
                 setDoctors(Object.entries(data).map(([docId, name]) => ({ docId, name })));
@@ -40,98 +40,104 @@ const PatientRegister = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-    
+        setErrorMessage(''); // Clear error message before each submit
+
         try {
-            const response = await fetch('http://localhost:3043/api/register', {
+            const response = await fetch('http://localhost:3043/api/appointment', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(formData),
             });
-    
+
             if (!response.ok) {
-                const errorMessage = await response.text(); // Get error message
+                const errorMessage = await response.text();
+                
+                // Display specific message based on status code
+                if (response.status === 500) {
+                    setErrorMessage('Registration failed due to a server error. Please try again later.');
+                } else {
+                    setErrorMessage(errorMessage);
+                }
+
                 throw new Error(errorMessage);
             }
-    
+
             const result = await response.json();
-            alert('Registration successful!');
+            alert('Appointment successful!');
             navigate('/');
         } catch (error) {
-            console.error('Registration error:', error);
-            alert('Registration failed, please try again.');
+            console.error('Appointment error:', error);
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <div className='flex flex-col items-center justify-center border rounded-lg p-4 max-w-md mx-auto'>
-            <span className='text-5xl m-2'>Patient Registration</span>
+        <div className='flex flex-col items-center justify-center border-[1px] rounded-lg p-4 max-w-md mx-auto mt-[150px] bg-white'>
+            <span className='text-4xl m-2 pb-5 text-[#FFA500] font-semibold hover:underline'>Patient Appointment</span>
+            
+            {/* Display error message if it exists */}
+            {errorMessage && <div className="text-red-500 mb-4">{errorMessage}</div>}
+            
             <form onSubmit={handleSubmit} className='w-full'>
                 <input
                     type="text"
-                    name="firstname" // Match with API
+                    name="firstname"
                     placeholder='First Name'
-                    className='mb-4 w-full p-2 border rounded bg-transparent text-orange-400 border-orange-400 focus:outline-none focus:border-[3px]'
+                    className='mb-4 w-full p-2 border rounded bg-transparent text-black border-orange-400 focus:outline-none focus:border-[2px]'
                     value={formData.firstname}
                     onChange={handleChange}
                     required
                 />
-
                 <input
                     type="text"
-                    name="lastname" // Match with API
+                    name="lastname"
                     placeholder='Last Name'
-                    className='mb-4 w-full p-2 border rounded bg-transparent text-orange-400 border-orange-400 focus:outline-none focus:border-[3px]'
+                    className='mb-4 w-full p-2 border rounded bg-transparent text-black border-orange-400 focus:outline-none focus:border-[2px]'
                     value={formData.lastname}
                     onChange={handleChange}
                     required
                 />
-
                 <input
                     type="date"
                     name="dob"
-                    className='mb-4 w-full p-2 border rounded bg-transparent text-orange-400 border-orange-400 focus:outline-none focus:border-[3px]'
+                    className='mb-4 w-full p-2 border rounded bg-transparent text-black border-orange-400 focus:outline-none focus:border-[2px]'
                     value={formData.dob}
                     onChange={handleChange}
                     required
                 />
-
                 <input
                     type="tel"
                     name="phone"
                     placeholder='Phone Number'
-                    className='mb-4 w-full p-2 border rounded bg-transparent text-orange-400 border-orange-400 focus:outline-none focus:border-[3px]'
+                    className='mb-4 w-full p-2 border rounded bg-transparent text-black border-orange-400 focus:outline-none focus:border-[2px]'
                     value={formData.phone}
                     onChange={handleChange}
                     required
                 />
-
                 <input
                     type="email"
                     name="email"
                     placeholder='Email'
-                    className='mb-4 w-full p-2 border rounded bg-transparent text-orange-400 border-orange-400 focus:outline-none focus:border-[3px]'
+                    className='mb-4 w-full p-2 border rounded bg-transparent text-black border-orange-400 focus:outline-none focus:border-[2px]'
                     value={formData.email}
                     onChange={handleChange}
                     required
                 />
-
                 <input
                     type="text"
                     name="issue"
                     placeholder='Issue'
-                    className='mb-4 w-full p-2 border rounded bg-transparent text-orange-400 border-orange-400 focus:outline-none focus:border-[3px]'
+                    className='mb-4 w-full p-2 border rounded bg-transparent text-black border-orange-400 focus:outline-none focus:border-[2px]'
                     value={formData.issue}
                     onChange={handleChange}
                     required
                 />
-
                 <select
                     name="gender"
-                    className='mb-4 w-full p-2 border rounded bg-transparent text-orange-400 border-orange-400 focus:outline-none focus:border-[3px]'
+                    className='mb-4 w-full p-2 border rounded bg-transparent text-black border-orange-400 focus:outline-none focus:border-[2px]'
                     value={formData.gender}
                     onChange={handleChange}
                     required
@@ -144,31 +150,33 @@ const PatientRegister = () => {
 
                 <select
                     name="doctorId"
-                    className='mb-4 w-full p-2 border rounded bg-transparent text-orange-400 border-orange-400 focus:outline-none focus:border-[3px]'
+                    className='mb-4 w-full p-2 border rounded bg-transparent text-black border-orange-400 focus:outline-none focus:border-[2px]'
                     value={formData.doctorId}
                     onChange={handleChange}
                     required
                 >
                     <option value="" disabled>Select Doctor</option>
                     {doctors.map((doctor) => (
-                        <option key={doctor.docId} value={doctor.docId}>
+                        <option key={doctor.docId} value={doctor.docId} className='text-orange-600'>
                             {doctor.name}
                         </option>
                     ))}
                 </select>
 
-                <button
-                    type='submit'
-                    className={`relative inline-flex items-center justify-center p-0.5 mb-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-pink-500 to-orange-400 group-hover:from-pink-500 group-hover:to-orange-400 hover:text-white focus:ring-4 focus:outline-none focus:ring-pink-200 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
-                    disabled={loading}
-                >
-                    <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-orange-100 text-black rounded-md group-hover:bg-opacity-0">
-                        {loading ? 'Processing...' : "Register"}
-                    </span>
-                </button>
+                <div className="flex justify-center mt-4">
+                    <button
+                        type='submit'
+                        className={`relative inline-flex items-center justify-center p-0.5 mb-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-pink-500 to-orange-400 group-hover:from-pink-500 group-hover:to-orange-400 hover:text-white focus:ring-4 focus:outline-none focus:ring-pink-200 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        disabled={loading}
+                    >
+                        <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-orange-100 text-black rounded-md group-hover:bg-opacity-0">
+                            {loading ? 'Processing...' : "Book Appointment"}
+                        </span>
+                    </button>
+                </div>
             </form>
         </div>
     );
 };
 
-export default PatientRegister;
+export default PatientAppointment;

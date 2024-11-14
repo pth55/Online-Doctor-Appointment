@@ -9,14 +9,14 @@ router.get('/doctorList', async (req, res) => {
         let collection = "doctors";
 
         const documents = await mongoose.connection.db.collection(collection).find({}).toArray();
-
+        
         if (!documents || documents.length === 0) {
             return res.status(400).json({
-                message: "Invalid Doctor"
+                message: documents
             });
         }
 
-        const data = documents.reduce((acc, doctor) => {
+        const data = documents.reduce((acc, doctor) => {    
             acc[doctor.docId] = doctor.name;
             return acc;
         }, {});
@@ -33,3 +33,4 @@ router.get('/doctorList', async (req, res) => {
 
 
 module.exports = router;
+

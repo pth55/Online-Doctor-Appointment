@@ -26,3 +26,4 @@ router.delete('/deletePatient', async (req, res) => {
 });
 
 module.exports = router;
+

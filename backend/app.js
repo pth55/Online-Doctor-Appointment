@@ -6,6 +6,7 @@ const validateRoutes = require('./routes/validate');
 const doctorListRoutes = require('./routes/doctorList');
 const registerRoutes = require('./routes/register');
 const deletePatientRoutes = require('./routes/deletePatient');
+const doctorRegisterRoute = require('./routes/doctorRegister');
 
 const { connectDB } = require('./config/db');
 require('dotenv').config();
@@ -28,6 +29,7 @@ app.use('/api', validateRoutes);
 app.use('/api', doctorListRoutes);
 app.use('/api', registerRoutes);
 app.use('/api', deletePatientRoutes);
+app.use('/api', doctorRegisterRoute);
 
 app.listen(PORT, () => {
     console.log(`Server running on PORT http://localhost:${PORT}/`);

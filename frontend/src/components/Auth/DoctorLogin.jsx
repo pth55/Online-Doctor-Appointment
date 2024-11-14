@@ -52,7 +52,6 @@ export default function DoctorLogin() {
                     email: doctorData.email,
                     phone: doctorData.phone,
                     edu: doctorData.edu
-                    // password is not taking into the atom
                 });
                 
                 setIsLogin({
@@ -70,19 +69,19 @@ export default function DoctorLogin() {
     
 
     return (
-        <div className='flex flex-col items-center justify-center border rounded-lg p-4 max-w-md mx-auto'>
-            <span className='text-5xl m-2'>Doctor Login</span>
+        <div className='bg-white flex flex-col items-center justify-center border-[1px] rounded-lg p-4 max-w-md mx-auto mt-[150px]'>
+            <span className='text-4xl m-2 text-[#FFA500] font-semibold hover:underline pb-2'>Doctor Login</span>
             <input
                 type="text"
                 placeholder='Username'
-                className='mb-4 w-full p-2 border rounded bg-transparent text-orange-400 border-orange-400 focus:outline-none focus:border-[3px]'
+                className='mb-4 w-full p-2 border rounded bg-transparent text-black border-orange-400 focus:outline-none focus:border-[2px]'
                 ref={uname}
             />
 
             <input
                 type="password"
                 placeholder='Password'
-                className='mb-4 w-full p-2 border border-orange-400 rounded bg-transparent text-orange-400 focus:outline-none focus:border-[3px]'
+                className='mb-4 w-full p-2 border border-orange-400 rounded bg-transparent text-black focus:outline-none focus:border-[2px]'
                 ref={pass}
             />
 
